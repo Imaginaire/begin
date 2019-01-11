@@ -30,4 +30,34 @@ class App extends Controller
         }
         return get_the_title();
     }
+
+    public static function container(){
+
+        // Options are container, container-fluid and fw-container (100% width, no gap)
+
+        $container = 'container';
+
+        return $container;
+
+    }
+
+    public static function logo(){
+
+        $logo_field = get_field('logo', 'options');
+
+        if($logo_field){
+
+            $logo = '<img src="'. $logo_field .'" alt="'. get_field('company', 'options') .'" class="logo" />';
+
+        }
+
+        else {
+
+            $logo = get_field('company', 'options');
+
+        }
+
+        return $logo;
+
+    }
 }

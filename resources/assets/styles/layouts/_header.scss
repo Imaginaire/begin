@@ -5,3 +5,8 @@
 .banner .nav a {
   @extend .nav-link;
 }
+
+.logo {
+  width: calc(650px / 3);
+  height: auto;
+}

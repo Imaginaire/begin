@@ -1,4 +1,4 @@
-<div class="page-header">
+<div class="page-header sticky-top">
   <h1>{!! App::title() !!} </h1>
   <ul>
 

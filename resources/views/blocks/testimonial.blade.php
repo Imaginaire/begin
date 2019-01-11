@@ -1,11 +1,23 @@
-<div class="container">
+<div class="{!! App::container() !!}">
 
-  <blockquote>
-    @field('testimonial')
-  </blockquote>
+  <div class="testimonial p-4 my-4 shadow-lg">
 
-  <p>
-    @field('customer_name')
-  </p>
+    <blockquote class="mb-4 text-dark">
+
+      @field('testimonial')
+
+    </blockquote>
+
+    <p class="text-primary mb-0">
+
+      <a href="@field('customer_website')">
+
+        @field('customer_name')
+
+      </a>
+
+    </p>
+
+  </div>
 
 </div>

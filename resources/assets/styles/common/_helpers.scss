@@ -1,0 +1,10 @@
+
+@function color($key) {
+  @if map-has-key($theme-colors, $key) {
+    @return map-get($theme-colors, $key);
+  }
+
+  @warn "Unknown `#{$key}` in $theme-colors.";
+
+  @return null;
+}
