@@ -90,3 +90,8 @@ Container::getInstance()
             'view' => require dirname(__DIR__).'/config/view.php',
         ]);
     }, true);
+
+    function my_custom_login() {
+      echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo('stylesheet_directory') . '/assets/login/custom-login.css" />';
+    }
+    add_action('login_head', 'my_custom_login');

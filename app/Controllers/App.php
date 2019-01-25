@@ -11,6 +11,15 @@ class App extends Controller
         return get_bloginfo('name');
     }
 
+    /*public function primarymenu() {
+      $args = array(
+        'theme_location'    => 'primary_navigation',
+        'menu_class'        => 'nav',
+        'walker'            => new wp_bootstrap4_navwalker()
+      );
+      return $args;
+  }*/
+
     public static function title()
     {
         if (is_home()) {
