@@ -79,4 +79,19 @@ class App extends Controller
       return $args;
     }
 
+    public static function logo_carousel() {
+        if(get_sub_field('logo_carousel')):
+            $terms = get_sub_field('logo_carousel');
+            $type = $terms->name;
+
+            $shortcode = '[logos type='.$type.']';
+        else:
+            $shortcode = '[logos]';
+        endif;
+
+        $cmd = do_shortcode($shortcode);
+
+        echo $cmd;
+    }
+
 }
