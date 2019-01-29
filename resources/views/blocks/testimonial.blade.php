@@ -1,6 +1,6 @@
 <div class="{!! App::container() !!}">
 
-  <div class="testimonial p-4 my-4 shadow-lg">
+  <div class="testimonial p-4 my-4">
 
     <blockquote class="mb-4 text-dark">
 

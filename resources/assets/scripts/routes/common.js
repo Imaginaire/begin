@@ -10,7 +10,7 @@ export default {
 
     $('.logo-carousel').slick({
       infinite: true,
-      slidesToShow: 1,
+      slidesToShow: 5,
       slidesToScroll: 1,
     });
   },

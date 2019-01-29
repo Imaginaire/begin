@@ -1,12 +1,12 @@
 <div class="{!! App::container() !!}">
 
-  <div class="logo-section p-4 my-4 shadow-lg">
+  <div class="logo-section p-4 my-4 text-center">
 
-    <blockquote class="mb-4 text-dark text-center">
+    <div class="mb-4 text-dark text-center">
 
       @field('introduction')
 
-    </blockquote>
+    </div>
 
     <p class="text-primary mb-0">
 
