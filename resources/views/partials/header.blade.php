@@ -1,16 +1,46 @@
+
 <header class="banner">
-  <div class="container">
 
-    <a class="brand" href="{{ home_url('/') }}">
+    <div class="brand">
 
-        {!! App::logo() !!}
+      <a class="navbar-brand" href="{{ home_url('/') }}">
 
-    </a>
+          {!! App::logo() !!}
 
-    <nav class="nav-primary">
-      @if (has_nav_menu('primary_navigation'))
-        {!! wp_nav_menu($primarymenu) !!}
-      @endif
+      </a>
+
+    </div>
+
+    <nav class="nav-primary navbar-expand navbar-light" role="navigation">
+
+      <div class="collapse navbar-collapse">
+
+        @if (has_nav_menu('primary_navigation'))
+
+          {!! wp_nav_menu($primarymenu) !!}
+
+        @endif
+
+      </div>
+
     </nav>
-  </div>
+
+    <div class="right">
+
+      <a href="@option('header_link')" class="btn btn-primary d-none d-sm-block">
+
+        @option('header_cta')
+
+      </a>
+
+      <a href="#0" class="menu-toggle d-flex d-sm-none">
+        <div>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </a>
+
+    </div>
+
 </header>

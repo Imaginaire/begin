@@ -33,6 +33,9 @@ add_action('after_setup_theme', function () {
     add_theme_support('soil-nice-search');
     add_theme_support('soil-relative-urls');
 
+    // Remove admin bar from front-end
+    add_filter('show_admin_bar', '__return_false');
+
     /**
      * Enable plugins to manage the document title
      * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag

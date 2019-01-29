@@ -1,3 +1,33 @@
+.banner {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 0 30px;
+
+  .brand {
+    width: 25%;
+
+    @include MQ(S) {
+      width: 50%;
+    }
+  }
+
+  .right {
+    display: flex;
+    justify-content: flex-end;
+    width: 25%;
+
+    @include MQ(S) {
+      width: 50%;
+    }
+  }
+
+  @include MQ(S) {
+    // Mobile rules for .banner
+    padding: 15px;
+  }
+}
+
 .banner .nav li {
   @extend .nav-item;
 }

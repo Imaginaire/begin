@@ -69,4 +69,14 @@ class App extends Controller
         return $logo;
 
     }
+
+    public function primarymenu() {
+      $args = array(
+        'theme_location'    => 'primary_navigation',
+        'menu_class'        => 'navbar-nav mx-auto p-3',
+        'walker'            => new wp_bootstrap4_navwalker()
+      );
+      return $args;
+    }
+
 }

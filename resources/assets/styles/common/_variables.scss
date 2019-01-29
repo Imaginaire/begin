@@ -13,3 +13,15 @@ $theme-colors: (
 /** Bootstrap navbar fix (https://git.io/fADqW) */
 $navbar-dark-toggler-icon-bg: none;
 $navbar-light-toggler-icon-bg: none;
+
+$bezier: cubic-bezier(0.645, 0.045, 0.355, 1);
+$ease: ease-in-out;
+$slowease: all ease-in-out 1s;
+
+$bez: all cubic-bezier(0.645, 0.045, 0.355, 1) 0.4s;
+
+$timing: 0.8s;
+
+$transition: all $bezier $timing;
+
+$transition-alt: all $ease $timing;

@@ -10,7 +10,7 @@
   },
   "publicPath": "/wp-content/themes/start",
   "devUrl": "http://localhost/start",
-  "proxyUrl": "http://localhost:3000",
+  "proxyUrl": "http://localhost:3000/start",
   "cacheBusting": "[name]_[hash:8]",
   "watch": [
     "app/**/*.php",
