@@ -72,7 +72,7 @@ add_action('after_setup_theme', function () {
      * Use main stylesheet for visual editor
      * @see resources/assets/styles/layouts/_tinymce.scss
      */
-    add_editor_style(asset_path('styles/main.css'));
+    add_editor_style(asset_path('styles/admin.css'));
 }, 20);
 
 /**
@@ -131,5 +131,9 @@ add_action('after_setup_theme', function () {
      */
     sage('blade')->compiler()->directive('asset', function ($asset) {
         return "<?= " . __NAMESPACE__ . "\\asset_path({$asset}); ?>";
+    });
+
+    sage('blade')->compiler()->directive('featimg', function ($size) {
+        return "<?php the_post_thumbnail($size, array( 'class' => 'img-fluid' )); ?>";
     });
 });

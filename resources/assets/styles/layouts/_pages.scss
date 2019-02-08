@@ -10,4 +10,32 @@
 
 .news-post {
   background: #fff;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.carousel {
+  .item {
+    background-size: cover !important;
+    width: 100%;
+    min-height: 70vh;
+  }
+}
+
+// Controls container for embedded media
+.entry-content-asset {
+  text-align: center;
+}
+
+.panels {
+  .panel {
+    min-height: 60vh;
+    background-size: cover !important;
+
+    @include MQ(S) {
+      width: 100% !important;
+    }
+  }
 }

@@ -94,6 +94,23 @@ class App extends Controller
         echo $cmd;
     }
 
-    public function
+    public static function panel_bg() {
+
+        if( get_sub_field('bg_type') == 'Image'):
+
+            $style .= 'background: url('. get_sub_field('bg_image') .');';
+
+        elseif( get_sub_field('bg_type') == 'Colour' ):
+
+            $style .= 'background: '. get_sub_field('bg_colour') .';';
+
+        else:
+
+            $style = '';
+
+        endif;
+
+        return $style;
+    }
 
 }

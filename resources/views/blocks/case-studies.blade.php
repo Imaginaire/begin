@@ -3,7 +3,7 @@
   <div class="{!! App::container() !!}">
 
     @query([
-      'post_type' => 'post'
+      'post_type' => 'case-study'
     ])
 
     <div class="row float-left">

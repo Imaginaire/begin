@@ -6,7 +6,19 @@ export default {
       $('.menu-toggle').toggleClass('toggle-open');
     });
 
-    // Owl carousel
+    // Carousel
+
+    $('.carousel').slick({
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    });
+
+    $('.flex-carousel').slick({
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    });
 
     $('.logo-carousel').slick({
       infinite: true,
