@@ -98,15 +98,21 @@ class App extends Controller
 
         if( get_sub_field('bg_type') == 'Image'):
 
-            $style .= 'background: url('. get_sub_field('bg_image') .');';
+            $style = 'background: url('. get_sub_field('bg_image') .');';
 
         elseif( get_sub_field('bg_type') == 'Colour' ):
 
-            $style .= 'background: '. get_sub_field('bg_colour') .';';
+            $style = 'background: '. get_sub_field('bg_colour') .';';
 
         else:
 
             $style = '';
+
+        endif;
+
+        if( get_sub_field('text_colour') ):
+
+            $style .= ' color: '. get_sub_field('text_colour') .' !important;';
 
         endif;
 

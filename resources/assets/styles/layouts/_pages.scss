@@ -30,11 +30,14 @@
 }
 
 .panels {
+  flex-wrap: wrap;
+
   .panel {
     min-height: 60vh;
     background-size: cover !important;
 
     @include MQ(S) {
+      min-height: 40vh;
       width: 100% !important;
     }
   }
