@@ -1,210 +1,228 @@
 <?php
-namespace App;
+namespace App\Controllers;
 /**
- * Class NavWalker
+ * Bootstrap 4 "Navbar" component navwalker drop-in functionality for Sage 9
+ * Version: 1.0
+ * Author: Michael W. Delaney
  *
- * Bootstrap 4 walker with cleaner markup for wp_nav_menu()
- * For use with Sage >= 8.5
- *
- * Based on Soil NavWalker
- * @url https://github.com/roots/soil
- *
- *
- * Walker_Nav_Menu (WordPress default) example output:
- *   <li id="menu-item-8" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8"><a href="/">Home</a></li>
- *
- * NavWalker example output:
- *   <li class="nav-item menu-item menu-home"><a class="nav-link" href="/">Home</a></li>
- *
- * @package Roots\Sage\Nav
  */
-class NavWalker extends \Walker_Nav_Menu {
-  /**
-   * @var bool
-   */
-  private $cpt; // Boolean, is current post a custom post type
-  /**
-   * @var false|string
-   */
-  private $archive; // Stores the archive page for current URL
-  /**
-   * NavWalker constructor.
-   */
-  public function __construct() {
-    add_filter( 'nav_menu_css_class', array( $this, 'cssClasses' ), 10, 2 );
-    add_filter( 'nav_menu_item_id', '__return_null' );
-    $cpt           = get_post_type();
-    $this->cpt     = in_array( $cpt, get_post_types( array( '_builtin' => false ) ) );
-    $this->archive = get_post_type_archive_link( $cpt );
-  }
-  /**
-   * Check item classes for current or active
-   *
-   * @param $classes
-   *
-   * @return int
-   */
-  public function checkCurrent( $classes ) {
-    return preg_match( '/(current[-_])|active/', $classes );
-  }
-  // @codingStandardsIgnoreStart
-  /**
-   * Add dropdown menu class to dropdown UL
-   *
-   * @param string $output
-   * @param int $depth
-   * @param array $args
-   */
-  function start_lvl( &$output, $depth = 0, $args = [] ) {
-    $output .= "\n<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">\n";
-  }
-  /**
-   * Add required Bootstrap 4 classes to anchor links.
-   *
-   * @param string $output
-   * @param \WP_Post $item
-   * @param int $depth
-   * @param array $args
-   * @param int $id
-   */
-  function start_el( &$output, $item, $depth = 0, $args = [], $id = 0 ) {
-    $item_html = '';
-    parent::start_el( $item_html, $item, $depth, $args );
-    if ( $item->is_subitem ) {
-      $item_html = str_replace( '<a', '<a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"', $item_html );
-      $item_html = str_replace( '</a>', ' <b class="caret"></b></a>', $item_html );
-    } else {
-      $item_html = str_replace( '<a', '<a class="nav-link"', $item_html );
+
+/**
+ * Class Name: wp_bootstrap4_navwalker
+ * GitHub URI: https://github.com/twittem/wp-bootstrap-navwalker
+ * Description: A custom WordPress nav walker class to implement the Bootstrap 3 navigation style in a custom theme using the WordPress built in menu manager.
+ * Version: 2.0.4
+ * Author: Edward McIntyre - @twittem
+ * License: GPL-2.0+
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ */
+
+if (class_exists('\Walker_Nav_Menu')) {
+
+  class wp_bootstrap4_navwalker extends \Walker_Nav_Menu {
+      /**
+     * @see Walker::start_lvl()
+     * @since 3.0.0
+     *
+     * @param string $output Passed by reference. Used to append additional content.
+     * @param int $depth Depth of page. Used for padding.
+     */
+    public function start_lvl( &$output, $depth = 0, $args = array() ) {
+      $indent = str_repeat( "\t", $depth );
+      $output .= "\n$indent<div role=\"menu\" class=\" dropdown-menu\">\n";
     }
-    $item_html = apply_filters( 'wp_nav_menu_item', $item_html );
-    $output .= $item_html;
-  }
-  /**
-   * Add active classes to active items & sub items
-   *
-   * @param object $element
-   * @param array $children_elements
-   * @param int $max_depth
-   * @param int $depth
-   * @param array $args
-   * @param string $output
-   */
-  public function display_element( $element, &$children_elements, $max_depth, $depth = 0, $args, &$output ) {
-    $element->is_subitem = ( ( ! empty( $children_elements[ $element->ID ] ) && ( ( $depth + 1 ) < $max_depth || ( $max_depth === 0 ) ) ) );
-    if ( $element->is_subitem ) {
-      foreach ( $children_elements[ $element->ID ] as $child ) {
-        if ( $child->current_item_parent || $this->url_compare( $this->archive, $child->url ) ) {
-          $element->classes[] = 'active';
+    /**
+     * Ends the list of after the elements are added.
+     *
+     * @see Walker::end_lvl()
+     *
+     * @since 3.0.0
+     *
+     * @param string $output Passed by reference. Used to append additional content.
+     * @param int    $depth  Depth of menu item. Used for padding.
+     * @param array  $args   An array of arguments. @see wp_nav_menu()
+     */
+    public function end_lvl( &$output, $depth = 0, $args = array() ) {
+      $indent = str_repeat("\t", $depth);
+      $output .= "$indent</div>\n";
+    }
+    /**
+     * Start the element output.
+     *
+     * @see Walker::start_el()
+     *
+     * @since 3.0.0
+     *
+     * @param string $output Passed by reference. Used to append additional content.
+     * @param object $item   Menu item data object.
+     * @param int    $depth  Depth of menu item. Used for padding.
+     * @param array  $args   An array of arguments. @see wp_nav_menu()
+     * @param int    $id     Current item ID.
+     */
+    public function end_el( &$output, $item, $depth = 0, $args = array() ) {
+      if($depth === 1){
+        if(strcasecmp( $item->attr_title, 'divider' ) == 0 || strcasecmp( $item->title, 'divider') == 0) {
+          $output .= '</div>';
+        }else if ($depth === 1 && (strcasecmp( $item->attr_title, 'header') == 0 && $depth === 1)) {
+          $output .= '</h6>';
         }
+      }else{
+        $output .= '</li>';
       }
     }
-    $element->is_active = ( ! empty( $element->url ) && strpos( $this->archive, $element->url ) );
-    if ( $element->is_active ) {
-      $element->classes[] = 'active';
-    }
-    parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
-  }
-  // @codingStandardsIgnoreEnd
-  /**
-   * Clean up css classes
-   *
-   * @param $classes
-   * @param $item
-   *
-   * @return array
-   */
-  public function cssClasses( $classes, $item ) {
-    $slug = sanitize_title( $item->title );
-    // Fix core `active` behavior for custom post types
-    if ( $this->cpt ) {
-      $classes = str_replace( 'current_page_parent', '', $classes );
-      if ( $this->url_compare( $this->archive, $item->url ) ) {
-        $classes[] = 'active';
+    /**
+     * @see Walker::start_el()
+     * @since 3.0.0
+     *
+     * @param string $output Passed by reference. Used to append additional content.
+     * @param object $item Menu item data object.
+     * @param int $depth Depth of menu item. Used for padding.
+     * @param int $current_page Menu item ID.
+     * @param object $args
+     */
+    public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+      $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+      /**
+       * Dividers, Headers or Disabled
+       * =============================
+       * Determine whether the item is a Divider, Header, Disabled or regular
+       * menu item. To prevent errors we use the strcasecmp() function to so a
+       * comparison that is not case sensitive. The strcasecmp() function returns
+       * a 0 if the strings are equal.
+       */
+      //( strcasecmp($item->attr_title, 'disabled' ) == 0 )
+
+      if($depth === 1 && (strcasecmp( $item->attr_title, 'divider' ) == 0 || strcasecmp( $item->title, 'divider') == 0)) {
+        $output .= $indent . '<div class="dropdown-divider">';
+      }else if ((strcasecmp( $item->attr_title, 'header') == 0 && $depth === 1) && $depth === 1){
+        $output .= $indent . '<h6 class="dropdown-header">' . esc_attr( $item->title );
+      }else{
+        $class_names = $value = '';
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+
+        $atts = array();
+        $atts['title']  = ! empty( $item->title )	? $item->title	: '';
+        $atts['target'] = ! empty( $item->target )	? $item->target	: '';
+        $atts['rel']    = ! empty( $item->xfn )		? $item->xfn	: '';
+        $atts['href'] = ! empty( $item->url ) ? $item->url : '';
+        $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
+
+        if ( in_array( 'current-menu-item', $classes ) )
+          $classes[] = ' active';
+        if($depth === 0){
+          $classes[] = 'nav-item';
+          $classes[] = 'nav-item-' . $item->ID;
+          $atts['class']			= 'nav-link';
+          if ( $args->has_children ){
+            $classes[] = ' dropdown';
+            $atts['href']   		= '#';
+            $atts['data-toggle']	= 'dropdown';
+            $atts['class']			= 'dropdown-toggle nav-link';
+            $atts['role']	= 'button';
+            $atts['aria-haspopup']	= 'true';
+          }
+          $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
+          $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+          $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
+          $output .= $indent . '<li' . $id . $value . $class_names .'>';
+        }else{
+          $classes[] = 'dropdown-item';
+          $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
+          $atts['class'] = $class_names;
+          $atts['id'] = $id;
+        }
+
+        $atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args );
+        $attributes = '';
+        foreach ( $atts as $attr => $value ) {
+          if ( ! empty( $value ) ) {
+            $value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+            $attributes .= ' ' . $attr . '="' . $value . '"';
+          }
+        }
+        $item_output = $args->before;
+        $item_output .= '<a'. $attributes .'>';
+
+        /*
+        * Icons
+        * ===========
+        * Since the the menu item is NOT a Divider or Header we check the see
+        * if there is a value in the attr_title property. If the attr_title
+        * property is NOT null we apply it as the class name for the icon
+        */
+        if ( ! empty( $item->attr_title ) ){
+          $item_output .= '<span class="' . esc_attr( $item->attr_title ) . '"></span>&nbsp;';
+        }
+        $item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
+        $item_output .= '</a>';
+        $item_output .= $args->after;
+        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
       }
     }
-    // Remove most core classes
-    $classes = preg_replace( '/(current(-menu-|[-_]page[-_])(item|parent|ancestor))/', 'active', $classes );
-    $classes = preg_replace( '/^((menu|page)[-_\w+]+)+/', '', $classes );
-    // Add `menu-item` class & re-add core `menu-item` class
-    $classes[] = 'nav-item menu-item';
-    // Add `dropdown` class & re-add core `menu-item-has-children` class on parent elements
-    if ( $item->is_subitem ) {
-      $classes[] = 'dropdown menu-item-has-children';
+    /**
+     * Traverse elements to create list from elements.
+     *
+     * Display one element if the element doesn't have any children otherwise,
+     * display the element and its children. Will only traverse up to the max
+     * depth and no ignore elements under that depth.
+     *
+     * This method shouldn't be called directly, use the walk() method instead.
+     *
+     * @see Walker::start_el()
+     * @since 2.5.0
+     *
+     * @param object $element Data object
+     * @param array $children_elements List of elements to continue traversing.
+     * @param int $max_depth Max depth to traverse.
+     * @param int $depth Depth of current element.
+     * @param array $args
+     * @param string $output Passed by reference. Used to append additional content.
+     * @return null Null on failure with no changes to parameters.
+     */
+    public function display_element( $element, &$children_elements, $max_depth, $depth, $args, &$output ) {
+      if ( ! $element )
+        return;
+      $id_field = $this->db_fields['id'];
+      // Display this element.
+      if ( is_object( $args[0] ) )
+        $args[0]->has_children = ! empty( $children_elements[ $element->$id_field ] );
+      parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
     }
-    // Add `menu-<slug>` class
-    $classes[] = 'menu-' . $slug;
-    $classes = array_unique( $classes );
-    $classes = array_map( 'trim', $classes );
-    return array_filter( $classes );
-  }
-  /**
-   * Make a URL relative
-   *
-   * Utility function, from soil
-   * @url https://github.com/roots/soil
-   *
-   * @param $input
-   *
-   * @return string
-   */
-  public function root_relative_url( $input ) {
-    if ( is_feed() ) {
-      return $input;
+    /**
+     * Menu Fallback
+     * =============
+     * If this function is assigned to the wp_nav_menu's fallback_cb variable
+     * and a manu has not been assigned to the theme location in the WordPress
+     * menu manager the function with display nothing to a non-logged in user,
+     * and will add a link to the WordPress menu manager if logged in as an admin.
+     *
+     * @param array $args passed from the wp_nav_menu function.
+     *
+     */
+    public static function fallback( $args ) {
+      if ( current_user_can( 'manage_options' ) ) {
+        extract( $args );
+        $fb_output = null;
+        if ( $container ) {
+          $fb_output = '<' . $container;
+          if ( $container_id )
+            $fb_output .= ' id="' . $container_id . '"';
+          if ( $container_class )
+            $fb_output .= ' class="' . $container_class . '"';
+          $fb_output .= '>';
+        }
+        $fb_output .= '<ul';
+        if ( $menu_id )
+          $fb_output .= ' id="' . $menu_id . '"';
+        if ( $menu_class )
+          $fb_output .= ' class="' . $menu_class . '"';
+        $fb_output .= '>';
+        $fb_output .= '<li><a href="' . admin_url( 'nav-menus.php' ) . '">Add a menu</a></li>';
+        $fb_output .= '</ul>';
+        if ( $container )
+          $fb_output .= '</' . $container . '>';
+        echo $fb_output;
+      }
     }
-    $url = parse_url( $input );
-    if ( ! isset( $url['host'] ) || ! isset( $url['path'] ) ) {
-      return $input;
-    }
-    $site_url = parse_url( network_home_url() );  // falls back to home_url
-    if ( ! isset( $url['scheme'] ) ) {
-      $url['scheme'] = $site_url['scheme'];
-    }
-    $hosts_match   = $site_url['host'] === $url['host'];
-    $schemes_match = $site_url['scheme'] === $url['scheme'];
-    $ports_exist   = isset( $site_url['port'] ) && isset( $url['port'] );
-    $ports_match   = ( $ports_exist ) ? $site_url['port'] === $url['port'] : true;
-    if ( $hosts_match && $schemes_match && $ports_match ) {
-      return wp_make_link_relative( $input );
-    }
-    return $input;
-  }
-  /**
-   * Compare URL against relative URL
-   *
-   * Utility function, from Soil
-   * @url https://github.com/roots/soil
-   *
-   * @param $url
-   * @param $rel
-   *
-   * @return bool
-   */
-  public function url_compare( $url, $rel ) {
-    $url = trailingslashit( $url );
-    $rel = trailingslashit( $rel );
-    return ( ( strcasecmp( $url, $rel ) === 0 ) || $this->root_relative_url( $url ) == $rel );
   }
 }
-/**
- * Clean up wp_nav_menu_args
- *
- * Remove the container
- * Remove the id="" on nav menu items
- *
- * @param string $args
- *
- * @return array
- */
-function nav_menu_args( $args = '' ) {
-  $nav_menu_args              = [];
-  $nav_menu_args['container'] = false;
-    if ( is_array($args) && !$args['items_wrap'] ) {
-      $nav_menu_args['items_wrap'] = '<ul class="%2$s">%3$s</ul>';
-    }
-    if ( ! $args['walker'] ) {
-      $nav_menu_args['walker'] = new NavWalker();
-    }
-  return array_merge( $args, $nav_menu_args );
-}
-add_filter( 'wp_nav_menu_args', __NAMESPACE__ . '\\nav_menu_args' );
-add_filter( 'nav_menu_item_id', '__return_null' );
